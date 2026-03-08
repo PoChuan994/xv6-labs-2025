@@ -57,9 +57,56 @@ main(int argc, char *argv[])
   exit(0);
 }
 
-void
-memdump(char *fmt, char *data)
+void memdump(char *fmt, char *data)
 {
-  // Your code here.
-
+    /* p is the pointer to traverse the data */
+    char *p = data;
+    for(char *f = fmt; *f; f++){
+        switch(*f){
+            case 'i':{
+                int v = 0;
+                memmove(&v, p, 4);
+                printf("%d\n", v);
+                p += 4;
+                break;
+            }
+            case 'p':{
+                unsigned long long v = 0;
+                memmove(&v, p, 8);
+                printf("%llx\n", v);
+                p += 8;
+                break;
+            }
+            case 'h':{
+                short v = 0;
+                memmove(&v, p, 2);
+                printf("%d\n", v);
+                p += 2;
+                break;
+            }
+            case 'c':{
+                char v = *p;
+                printf("%c\n", v);
+                p += 1;
+                break;
+            }
+            case 's':{
+                char *strptr = 0;
+                memmove(&strptr, p, sizeof(strptr));
+                if(strptr)
+                    printf("%s\n", strptr);
+                else
+                    printf("(null)\n");
+                p += sizeof(strptr);
+                break;
+            }
+            case 'S':{
+                printf("%s\n", p);
+                return;
+            }
+            default:
+            // unknown format char: ignore
+            break;
+        }
+    }
 }
